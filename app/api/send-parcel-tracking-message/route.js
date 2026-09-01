@@ -9,7 +9,7 @@ export async function POST(req) {
     return encodeURIComponent(`As Salamu Alaikum, Sir/Mam. Your Parcel has been handed to ${shippingMethod} courier. Please visit this link to track your parcel.
     
 Tracking Link: ${trackingLink}.
-Thank you for staying with Pushtidhara.`);
+Thank you for staying with Pustidhara.`);
   }
 
   const url = `https://panel.smsbangladesh.com/api?user=${encodeURIComponent(

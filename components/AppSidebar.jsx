@@ -14,7 +14,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import Image from "next/image";
-import pushtidharaLogo from "@/public/logo.png";
+import pustidharaLogo from "@/public/logo.png";
 import {
   BadgeDollarSign,
   Box,

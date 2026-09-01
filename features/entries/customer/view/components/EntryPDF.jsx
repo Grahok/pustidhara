@@ -174,7 +174,7 @@ const statusConfig = {
   Delivered: { bg: "#dcfce7", color: "#166534" },
 };
 
-const SITE_NAME = "Pushtidhara";
+const SITE_NAME = "Pustidhara";
 const CONTACT_MOBILE = process.env.NEXT_PUBLIC_CONTACT_MOBILE_NUMBER;
 const CONTACT_ADDRESS = process.env.NEXT_PUBLIC_CONTACT_ADDRESS;
 
