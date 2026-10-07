@@ -77,10 +77,11 @@ customerEntrySchema.pre("save", function (next) {
     (sum, product) => sum + (product.quantity * product.sellPrice || 0),
     0
   );
-  this.totalDiscount = this.products.reduce(
-    (sum, product) => sum + (product.discount || 0),
-    0
-  );
+  this.totalDiscount =
+    this.products.reduce(
+      (sum, product) => sum + (product.discount || 0),
+      0
+    ) + this.overallDiscount;
   this.totalIncome =
     this.paidByCustomer -
     this.totalShippingCharge -

@@ -45,7 +45,9 @@ import useDebounce from "@/hooks/use-debounce";
 import fetchCustomers from "@/features/customers/actions/fetchCustomers";
 import useEnterNavigation from "@/hooks/use-enter-navigation";
 import sendOrderToSteadfast from "@/features/entries/customer/add/actions/sendOrderToSteadfast";
+import updateCustomerEntry from "@/features/entries/customer/add/actions/updateCustomerEntry";
 import { Checkbox } from "@/components/ui/checkbox";
+import EntryPDF from "@/features/entries/customer/view/components/EntryPDF";
 
 const customerSchema = z.object({
   _id: z.string().optional(),
@@ -222,7 +224,6 @@ export default function ProfileForm() {
 
   // Handle form submission
   async function onSubmit(values) {
-    console.log(values);
     // Create customer if needed
     if (!values.customer._id) {
       const { success, createdCustomer } = await createCustomer(
@@ -252,16 +253,44 @@ export default function ProfileForm() {
       }),
     );
 
-    const { success, createdCustomerEntry } = await createCustomerEntry(values);
+    let { success, createdCustomerEntry } = await createCustomerEntry(values);
     if (success) {
       toast.success("Customer entry created successfully!");
       if (values.sendToSteadfast) {
         try {
-          await sendOrderToSteadfast(createdCustomerEntry);
-          toast.success(`Order sent to Steadfast successfully!`);
+          const { consignment } =
+            await sendOrderToSteadfast(createdCustomerEntry);
+          const { success, updatedCustomerEntry } = await updateCustomerEntry(
+            createdCustomerEntry._id,
+            { cnNumber: consignment.consignment_id },
+          );
+          createdCustomerEntry = updatedCustomerEntry;
+          if (success) {
+            toast.success(`Order sent to Steadfast successfully!`);
+          } else {
+            toast.error("Failed to save the CN number to the entry.");
+          }
         } catch (error) {
           toast.error(error.message || "Failed to send order to Steadfast.");
         }
+      }
+      try {
+        const { pdf } = await import("@react-pdf/renderer");
+        const blob = await pdf(
+          <EntryPDF entry={createdCustomerEntry} />,
+        ).toBlob();
+        const url = URL.createObjectURL(blob);
+        const win = window.open(url, "_blank");
+        if (win) {
+          try {
+            win.focus();
+            win.print();
+          } catch {
+            // PDF already opened; user prints manually
+          }
+        }
+      } catch (err) {
+        console.error(err);
       }
       setCourierData({});
       form.reset();

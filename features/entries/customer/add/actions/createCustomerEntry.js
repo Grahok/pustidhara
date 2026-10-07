@@ -8,7 +8,7 @@ export default async function createCustomerEntry(entryData) {
   try {
     await connectToDatabase();
     const createdCustomerEntry = await CustomerEntry.create(entryData);
-    console.log(createdCustomerEntry);
+    await createdCustomerEntry.populate("customer products.product");
     return {
       success: true,
       createdCustomerEntry: mongooseDocumentToPlainObject(createdCustomerEntry),
