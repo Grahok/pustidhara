@@ -48,6 +48,7 @@ import sendOrderToSteadfast from "@/features/entries/customer/add/actions/sendOr
 import updateCustomerEntry from "@/features/entries/customer/add/actions/updateCustomerEntry";
 import { Checkbox } from "@/components/ui/checkbox";
 import EntryPDF from "@/features/entries/customer/view/components/EntryPDF";
+import { ENTRY_SOURCES } from "@/constants/entrySources";
 
 const customerSchema = z.object({
   _id: z.string().optional(),
@@ -86,6 +87,7 @@ const customerEntrySchema = z.object({
   overallDiscount: z.coerce.number().nonnegative(),
   note: z.string(),
   message: z.string().optional(),
+  entrySource: z.enum(ENTRY_SOURCES),
 });
 
 export default function ProfileForm() {
@@ -129,6 +131,7 @@ export default function ProfileForm() {
       overallDiscount: "",
       note: "",
       message: "",
+      entrySource: ENTRY_SOURCES[ENTRY_SOURCES.length - 1],
       sendToSteadfast: true,
     },
   });
@@ -344,6 +347,33 @@ export default function ProfileForm() {
                           {ORDER_STATUSES.map((orderStatus, index) => (
                             <SelectItem key={index} value={orderStatus}>
                               {orderStatus}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="entrySource"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                        aria-label="Entry Source"
+                      >
+                        <SelectTrigger className="w-44" tabIndex={-1}>
+                          <SelectValue placeholder="Entry Source" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {ENTRY_SOURCES.map((source, index) => (
+                            <SelectItem key={index} value={source}>
+                              {source}
                             </SelectItem>
                           ))}
                         </SelectContent>

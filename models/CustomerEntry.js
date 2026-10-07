@@ -1,3 +1,4 @@
+import { ENTRY_SOURCES } from "@/constants/entrySources";
 import { ORDER_STATUSES } from "@/constants/orderStatuses";
 import { SHIPPING_METHODS } from "@/constants/shippingMethods";
 import mongoose from "mongoose";
@@ -48,10 +49,15 @@ const customerEntrySchema = new mongoose.Schema(
     totalIncome: { type: Number, default: 0 },
     netProfit: { type: Number, default: 0 },
     message: { type: String, default: "" },
+    entrySource: {
+      type: String,
+      enum: ENTRY_SOURCES,
+      default: ENTRY_SOURCES[ENTRY_SOURCES.length - 1],
+    },
   },
   {
     collection: "Customer Entries",
-  }
+  },
 );
 
 customerEntrySchema.pre("save", function (next) {
@@ -60,28 +66,26 @@ customerEntrySchema.pre("save", function (next) {
   });
   this.subtotal = this.products.reduce(
     (sum, product) => sum + (product.subtotal || 0),
-    0
+    0,
   );
   this.paidByCustomer =
     this.subtotal + this.shippingCustomer - this.overallDiscount;
   this.totalShippingCharge = this.shippingCustomer + this.shippingMerchant;
   this.totalQuantity = this.products.reduce(
     (sum, product) => sum + (product.quantity || 0),
-    0
+    0,
   );
   this.totalPurchasePrice = this.products.reduce(
     (sum, product) => sum + (product.quantity * product.purchasePrice || 0),
-    0
+    0,
   );
   this.totalSellPrice = this.products.reduce(
     (sum, product) => sum + (product.quantity * product.sellPrice || 0),
-    0
+    0,
   );
   this.totalDiscount =
-    this.products.reduce(
-      (sum, product) => sum + (product.discount || 0),
-      0
-    ) + this.overallDiscount;
+    this.products.reduce((sum, product) => sum + (product.discount || 0), 0) +
+    this.overallDiscount;
   this.totalIncome =
     this.paidByCustomer -
     this.totalShippingCharge -

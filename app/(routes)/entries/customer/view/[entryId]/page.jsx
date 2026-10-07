@@ -1,6 +1,7 @@
 "use client";
 
 import { ORDER_STATUSES } from "@/constants/orderStatuses";
+import { ENTRY_SOURCES } from "@/constants/entrySources";
 
 import { useEffect, useState } from "react";
 import SummarySection from "@/features/entries/customer/view/components/SummarySection";
@@ -25,6 +26,9 @@ export default function EditEntry({ params }) {
   const [trackingLink, setTrackingLink] = useState("");
   const [entry, setEntry] = useState();
   const [orderStatus, setOrderStatus] = useState("Pending");
+  const [entrySource, setEntrySource] = useState(
+    ENTRY_SOURCES[ENTRY_SOURCES.length - 1],
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -46,6 +50,9 @@ export default function EditEntry({ params }) {
         setCnNumber(entry.cnNumber);
         setTrackingLink(entry.message);
         setOrderStatus(entry.orderStatus);
+        setEntrySource(
+          entry.entrySource || ENTRY_SOURCES[ENTRY_SOURCES.length - 1],
+        );
         setShippingCustomer(entry.shippingCustomer);
         setShippingMerchant(entry.shippingMerchant);
         setOtherCost(entry.otherCost);
@@ -101,6 +108,7 @@ export default function EditEntry({ params }) {
         invoiceNumber,
         cnNumber,
         orderStatus,
+        entrySource,
         orderDate: combineDateWithCurrentTime(e.target.orderDate.value),
         entryDate: combineDateWithCurrentTime(e.target.entryDate.value),
         paymentDate:
@@ -224,6 +232,21 @@ export default function EditEntry({ params }) {
               {ORDER_STATUSES.map((orderStatus, index) => (
                 <option key={index} value={orderStatus}>
                   {orderStatus}
+                </option>
+              ))}
+            </select>
+
+            <select
+              name="entrySource"
+              id="entrySource"
+              className="p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 outline-none disabled:bg-gray-100 disabled:cursor-not-allowed"
+              value={entrySource}
+              onChange={(e) => setEntrySource(e.target.value)}
+              disabled={!isEditable}
+            >
+              {ENTRY_SOURCES.map((source, index) => (
+                <option key={index} value={source}>
+                  {source}
                 </option>
               ))}
             </select>

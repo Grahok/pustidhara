@@ -28,12 +28,14 @@ async function buildCustomerEntryQuery({
   toDate,
   search,
   orderStatus,
+  entrySource,
 } = {}) {
   const query = {};
   const normalizedFromDate = getFirstValue(fromDate);
   const normalizedToDate = getFirstValue(toDate);
   const normalizedSearch = getFirstValue(search)?.trim();
   const normalizedOrderStatus = getFirstValue(orderStatus);
+  const normalizedEntrySource = getFirstValue(entrySource);
 
   if (normalizedFromDate || normalizedToDate) {
     query.orderDate = {};
@@ -69,6 +71,10 @@ async function buildCustomerEntryQuery({
 
   if (normalizedOrderStatus) {
     query.orderStatus = normalizedOrderStatus;
+  }
+
+  if (normalizedEntrySource) {
+    query.entrySource = normalizedEntrySource;
   }
 
   return query;
@@ -116,6 +122,7 @@ export async function fetchPaginatedCustomerEntries(options = {}) {
       fromDate: getFirstValue(options.fromDate) || "",
       toDate: getFirstValue(options.toDate) || "",
       orderStatus: getFirstValue(options.orderStatus) || "",
+      entrySource: getFirstValue(options.entrySource) || "",
     },
   });
 }
