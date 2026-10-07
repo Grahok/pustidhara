@@ -17,6 +17,7 @@ export default async function AllCustomers({ searchParams }) {
     fromDate: getSearchParam(params, "fromDate"),
     toDate: getSearchParam(params, "toDate"),
     orderStatus: getSearchParam(params, "orderStatus"),
+    entrySource: getSearchParam(params, "entrySource"),
   });
 
   return (

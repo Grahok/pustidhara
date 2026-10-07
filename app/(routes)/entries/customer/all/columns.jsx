@@ -185,6 +185,13 @@ export const getColumns = (totals = {}) => [
     header: "Order Status",
   },
   {
+    accessorKey: "entrySource",
+    header: "Entry Source",
+    cell: ({ row }) => {
+      return row.getValue("entrySource") || "Other";
+    },
+  },
+  {
     accessorKey: "smsSent",
     header: "SMS Sent",
     cell: ({ row }) => {

@@ -29,6 +29,7 @@ export async function GET(req) {
     const toDate = url.searchParams.get("toDate");
     const search = url.searchParams.get("search")?.trim();
     const orderStatus = url.searchParams.get("orderStatus");
+    const entrySource = url.searchParams.get("entrySource");
     const requestedPage = getPositiveInteger(url.searchParams.get("page"), 1);
     const itemsPerPage = getItemsPerPage(url.searchParams.get("itemsPerPage"));
 
@@ -63,6 +64,10 @@ export async function GET(req) {
 
     if (orderStatus) {
       query.orderStatus = orderStatus;
+    }
+
+    if (entrySource) {
+      query.entrySource = entrySource;
     }
 
     // Count total entries matching the query

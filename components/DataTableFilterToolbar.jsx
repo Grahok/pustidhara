@@ -3,6 +3,14 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { ENTRY_SOURCES } from "@/constants/entrySources";
 
 export default function DataTableToolbar({
   filters = {},
@@ -12,12 +20,14 @@ export default function DataTableToolbar({
   const [search, setSearch] = useState(filters.search || "");
   const [fromDate, setFromDate] = useState(filters.fromDate || "");
   const [toDate, setToDate] = useState(filters.toDate || "");
+  const [entrySource, setEntrySource] = useState(filters.entrySource || "");
 
   useEffect(() => {
     setSearch(filters.search || "");
     setFromDate(filters.fromDate || "");
     setToDate(filters.toDate || "");
-  }, [filters.search, filters.fromDate, filters.toDate]);
+    setEntrySource(filters.entrySource || "");
+  }, [filters.search, filters.fromDate, filters.toDate, filters.entrySource]);
 
   function applyFilters(event) {
     event.preventDefault();
@@ -26,6 +36,8 @@ export default function DataTableToolbar({
       search: search.trim(),
       fromDate,
       toDate,
+      entrySource,
+      ...(filters.orderStatus ? { orderStatus: filters.orderStatus } : {}),
     });
   }
 
@@ -33,11 +45,14 @@ export default function DataTableToolbar({
     setSearch("");
     setFromDate("");
     setToDate("");
+    setEntrySource("");
 
     onApplyFilters?.({
       search: "",
       fromDate: "",
       toDate: "",
+      entrySource: "",
+      ...(filters.orderStatus ? { orderStatus: filters.orderStatus } : {}),
     });
   }
 
@@ -55,6 +70,24 @@ export default function DataTableToolbar({
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
+
+      {/* Entry Source Filter */}
+      <Select
+        value={entrySource || "ALL"}
+        onValueChange={(val) => setEntrySource(val === "ALL" ? "" : val)}
+      >
+        <SelectTrigger className="w-full sm:w-44">
+          <SelectValue placeholder="All Sources" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="ALL">All Sources</SelectItem>
+          {ENTRY_SOURCES.map((source) => (
+            <SelectItem key={source} value={source}>
+              {source}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
 
       {/* Date Range Filter */}
       <div className="flex flex-wrap items-center gap-2">
