@@ -41,8 +41,7 @@ export default function AllCustomerEntries() {
   const [search, setSearch] = useState("");
   const searchParams = useSearchParams();
   const fromDateParam =
-    searchParams.get("fromDate") ||
-    firstDateOfCurrentMonth(new Date(Date.now()));
+    searchParams.get("fromDate") || inputDateFormat(new Date(Date.now()));
   const toDateParam =
     searchParams.get("toDate") || inputDateFormat(new Date(Date.now()));
   const pageParam = Number(searchParams.get("page")) || 1;

@@ -1,4 +1,4 @@
-import { Inter } from "next/font/google";
+import { Anek_Bangla, Inter } from "next/font/google";
 import "./globals.css";
 import AppSidebar from "@/components/AppSidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
@@ -13,16 +13,10 @@ import {
 import SendSMSForm from "@/features/home/components/SendSMSForm";
 import { Toaster } from "@/components/ui/sonner";
 
-const inter = Inter({
-  subsets: [
-    "latin",
-    "latin-ext",
-    "cyrillic",
-    "cyrillic-ext",
-    "greek",
-    "greek-ext",
-  ],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+const anekBangla = Anek_Bangla({
+  subsets: ["bengali"],
+  weight: "variable",
+  display: "swap",
 });
 
 export const metadata = {
@@ -33,9 +27,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} antialiased min-h-dvh`}>
+      <body className={`${anekBangla.className} antialiased min-h-dvh`}>
         <SidebarProvider className="flex flex-col">
-          <header className="bg-gray-900 px-8 py-2 sticky top-0 z-50 w-full flex justify-between">
+          <header className="bg-gray-900 px-4 sm:px-8 py-2 sticky top-0 z-50 w-full flex justify-between items-center">
             <div className="flex items-center gap-2">
               <SidebarTrigger className="flex items-center justify-center text-white" />
               <h3 className="text-2xl font-bold text-blue-400">
@@ -47,10 +41,10 @@ export default function RootLayout({ children }) {
                 <DialogTrigger asChild>
                   <Button
                     variant="outline"
-                    className="bg-gray-800 text-gray-200 border-gray-600 hover:text-gray-200/80 hover:bg-gray-800"
+                    className="bg-gray-800 text-gray-200 border-gray-600 hover:text-gray-200/80 hover:bg-gray-800 text-xs sm:text-sm px-2.5 sm:px-4"
                   >
-                    <SendIcon />
-                    Send SMS
+                    <SendIcon className="size-3.5 sm:size-4" data-icon="inline-start" />
+                    <span>Send SMS</span>
                   </Button>
                 </DialogTrigger>
                 <DialogContent>
@@ -60,12 +54,12 @@ export default function RootLayout({ children }) {
               </Dialog>
             </div>
           </header>
-          <main className="flex grow">
+          <div className="flex grow min-w-0">
             <AppSidebar />
-            <main className="bg-gray-50 text-gray-800 p-6 grow">
+            <main className="bg-gray-50 text-gray-800 p-3 sm:p-6 lg:p-8 grow min-w-0 w-full overflow-x-hidden">
               {children}
             </main>
-          </main>
+          </div>
           <Toaster richColors />
         </SidebarProvider>
       </body>
