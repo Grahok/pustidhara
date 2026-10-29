@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   },
   contactLabel: {
     fontSize: 6.75,
-    color: "#666",
+    color: "#4a4a4a",
   },
   contactValue: {
     fontSize: 6.75,
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 9,
-    color: "#666",
+    color: "#4a4a4a",
   },
   section: {
     marginBottom: 12,
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
   },
   label: {
-    color: "#666",
+    color: "#4a4a4a",
   },
   value: {
     fontWeight: "normal",
@@ -178,6 +178,7 @@ const SITE_NAME = "Grahok";
 const CONTACT_MOBILE = process.env.NEXT_PUBLIC_CONTACT_MOBILE_NUMBER;
 const CONTACT_ADDRESS = process.env.NEXT_PUBLIC_CONTACT_ADDRESS;
 
+/*
 function formatCurrency(amount) {
   return new Intl.NumberFormat("bn-BD", {
     style: "currency",
@@ -185,6 +186,7 @@ function formatCurrency(amount) {
     maximumFractionDigits: 0,
   }).format(amount);
 }
+  */
 
 function formatDate(date) {
   return new Intl.DateTimeFormat("en-US", {
@@ -335,43 +337,37 @@ function EntryPDFContent({ entry, isCustomerCopy }) {
               <Text style={styles.col1}>
                 {item.product?.name || `Product ${index + 1}`}
               </Text>
-              <Text style={styles.col2}>{new Intl.NumberFormat("bn-BD").format(item.quantity)}</Text>
-              <Text style={styles.col3}>{formatCurrency(item.sellPrice)}</Text>
-              <Text style={styles.col4}>{formatCurrency(item.discount)}</Text>
-              <Text style={styles.col5}>{formatCurrency(item.subtotal)}</Text>
+              <Text style={styles.col2}>{item.quantity}</Text>
+              <Text style={styles.col3}>{item.sellPrice}</Text>
+              <Text style={styles.col4}>{item.discount}</Text>
+              <Text style={styles.col5}>{item.subtotal}</Text>
             </View>
           ))}
         </View>
         <View style={styles.row}>
           <Text style={styles.label}>Subtotal</Text>
-          <Text style={styles.value}>{formatCurrency(entry.subtotal)}</Text>
+          <Text style={styles.value}>{entry.subtotal}</Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.label}>Shipping Charge</Text>
           <Text style={styles.value}>
-            {entry.shippingCustomer > 0
-              ? formatCurrency(entry.shippingCustomer)
-              : "Free"}
+            {entry.shippingCustomer > 0 ? entry.shippingCustomer : "Free"}
           </Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.label}>Total Discount</Text>
-          <Text style={styles.value}>
-            {formatCurrency(entry.totalDiscount)}
-          </Text>
+          <Text style={styles.value}>{entry.totalDiscount}</Text>
         </View>
         {entry.courierTax > 0 && (
           <View style={styles.row}>
             <Text style={styles.label}>Courier Tax</Text>
-            <Text style={styles.value}>{formatCurrency(entry.courierTax)}</Text>
+            <Text style={styles.value}>{entry.courierTax}</Text>
           </View>
         )}
         <View style={[styles.row, styles.totalSection]}>
           <Text style={styles.bold}>Total</Text>
           <Text style={styles.bold}>
-            {formatCurrency(
-              entry.subtotal + entry.shippingCustomer - entry.overallDiscount,
-            )}
+            {entry.subtotal + entry.shippingCustomer - entry.overallDiscount}
           </Text>
         </View>
       </View>
